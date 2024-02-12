@@ -1,6 +1,9 @@
 package com.example.sightreading
 
+import android.content.Context
 import android.os.Bundle
+import android.text.Layout
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
@@ -9,6 +12,9 @@ import androidx.compose.foundation.layout.Box
 
 
 import androidx.compose.foundation.layout.Column
+
+import androidx.compose.foundation.layout.Row
+
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -16,8 +22,10 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Email
+import androidx.compose.material3.Button
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -27,6 +35,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -41,7 +50,8 @@ class MainActivity : ComponentActivity() {
             SightReadingTheme {
                 // A surface container using the 'background' color from the theme
                 Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
-                    Greeting("Android")
+                    //SightMaker(note = Notes.C,"Android")
+                    SightReadingApp()
                 }
             }
         }
@@ -57,9 +67,9 @@ enum class Notes(val offset: Dp) {
     B(30.dp);
 }
 @Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
+fun SightMaker(note: Notes, name: String, modifier: Modifier = Modifier) {
 
-    Box(modifier = Modifier) {
+    Box(contentAlignment = Alignment.Center, modifier = Modifier) {
 
         Column(modifier = Modifier
             .padding(30.dp)
@@ -82,17 +92,131 @@ fun Greeting(name: String, modifier: Modifier = Modifier) {
         Icon(
             painter = painterResource(R.drawable.wholenote),
             contentDescription = "Music",
-            Modifier.size(30.dp).align(Alignment.Center).offset(y=Notes.B.offset)
+            Modifier
+                .size(30.dp)
+                .align(Alignment.Center)
+                .offset(y = note.offset)
         )
+    }
+}
+
+@Composable
+fun QuizButtons(currentNote: Notes){
+    val context  = LocalContext.current
+    Column {
+        Row (horizontalArrangement = Arrangement.SpaceEvenly, verticalAlignment = Alignment.CenterVertically ,modifier = Modifier.fillMaxWidth()){
+
+
+            Button(onClick = {
+                NoteChecker(context, Notes.C, currentNote)
+
+            }) {
+                Text(text = "C")
+            }
+            Button(onClick = {
+                NoteChecker(context, Notes.D, currentNote)
+
+            }) {
+                Text(text = "D")
+            }
+            Button(onClick = {
+                NoteChecker(context, Notes.E, currentNote)
+
+            }) {
+                Text(text = "E")
+            }
+            Button(onClick = {
+                NoteChecker(context, Notes.F, currentNote)
+
+            }) {
+                Text(text = "F")
+            }
+        }
+        Row (horizontalArrangement = Arrangement.SpaceEvenly, verticalAlignment = Alignment.CenterVertically ,modifier = Modifier.fillMaxWidth()){
+            Spacer(modifier = Modifier.width(10.dp))
+            Button(onClick = {
+                NoteChecker(context,Notes.G, currentNote)
+
+            }) {
+                Text(text = "G")
+            }
+            Button(onClick = {
+                NoteChecker(context,Notes.A, currentNote)
+
+            }) {
+                Text(text = "A")
+            }
+            Button(onClick = {
+                NoteChecker(context, Notes.B, currentNote)
+
+            }) {
+                Text(text = "B")
+            }
+            Spacer(modifier = Modifier.width(10.dp))
+        }
+    }
+
+}
+fun showMessage(context: Context, message:String){
+    Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+}
+
+private fun NoteChecker(context: Context, buttonNote: Notes, currentNote: Notes) {
+    if (buttonNote == currentNote) {
+        ChangeNote(context)
+
+    } else {
+        WrongNote(context)
+    }
+}
+
+fun WrongNote(context: Context) {
+    val text = "Wrong Note!"
+    val duration = Toast.LENGTH_SHORT
+    val toast = Toast.makeText(context, text, duration)
+    toast.show()
+}
+
+fun ChangeNote(context: Context) {
+
+    val text = "Correct Note!"
+    val duration = Toast.LENGTH_SHORT
+    val toast = Toast.makeText(context, text, duration)
+    toast.show()
+
+
+}
+
+@Composable
+fun SightReadingApp(){
+    Column(verticalArrangement = Arrangement.Center,modifier = Modifier.fillMaxSize()) {
+        SightMaker(note = Notes.C,"Android")
+        QuizButtons(currentNote = Notes.C)
     }
 
 }
 
 @Preview(showBackground = true, device = "id:pixel_5")
 @Composable
-fun GreetingPreview() {
+fun SightMakerPreview() {
     SightReadingTheme {
-        Greeting("Android")
+        SightMaker(note = Notes.C,"Android")
     }
+}
+@Preview(showBackground = true, device = "id:pixel_7_pro")
+@Composable
+fun QuizButtonsPreview(){
+    SightReadingTheme {
+        QuizButtons(currentNote = Notes.C)
+    }
+
+}
+@Preview(showBackground = true, device = "id:pixel_7_pro")
+@Composable
+fun SightReadingAppPreview(){
+    SightReadingTheme {
+        SightReadingApp()
+    }
+
 }
 

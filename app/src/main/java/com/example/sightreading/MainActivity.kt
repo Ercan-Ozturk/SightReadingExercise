@@ -97,6 +97,15 @@ fun SightMaker(note: Notes, name: String, modifier: Modifier = Modifier) {
                 .align(Alignment.Center)
                 .offset(y = note.offset)
         )
+        Icon(
+            painter = painterResource(R.drawable.fclef),
+            contentDescription = "Bass Clef",
+            Modifier
+                .size(100.dp)
+                .align(Alignment.CenterStart)
+                .offset(x= 30.dp, y = -12.dp)
+
+        )
     }
 }
 

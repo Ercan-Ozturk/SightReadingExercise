@@ -80,7 +80,7 @@ fun Greeting(name: String, modifier: Modifier = Modifier) {
             Spacer(modifier = Modifier.height(30.dp))
         }
         Icon(
-            painter = painterResource(R.drawable.baseline_music_note_24),
+            painter = painterResource(R.drawable.wholenote),
             contentDescription = "Music",
             Modifier.size(30.dp).align(Alignment.Center).offset(y=Notes.B.offset)
         )

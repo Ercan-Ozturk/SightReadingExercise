@@ -27,6 +27,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Email
 import androidx.compose.material3.Button
 import androidx.compose.material3.Divider
+import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -37,13 +38,18 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Shadow
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.sightreading.ui.theme.SightReadingTheme
 
@@ -104,7 +110,7 @@ fun SightMaker(viewModel: QuizViewModel, note: Notes) {
             painter = painterResource(R.drawable.wholenote),
             contentDescription = "Music",
             Modifier
-                .size(30.dp)
+                .size(40.dp)
                 .align(Alignment.Center)
                 .offset(y = viewModel.currentNote.offset)
         )
@@ -127,25 +133,25 @@ fun QuizButtons(viewModel: QuizViewModel){
         Row (horizontalArrangement = Arrangement.SpaceEvenly, verticalAlignment = Alignment.CenterVertically ,modifier = Modifier.fillMaxWidth()){
 
 
-            Button(onClick = {
+            ElevatedButton(onClick = {
                 NoteChecker(viewModel, context, Notes.C)
 
             }) {
                 Text(text = "C")
             }
-            Button(onClick = {
+            ElevatedButton(onClick = {
                 NoteChecker(viewModel, context, Notes.D)
 
             }) {
                 Text(text = "D")
             }
-            Button(onClick = {
+            ElevatedButton(onClick = {
                 NoteChecker(viewModel, context, Notes.E)
 
             }) {
                 Text(text = "E")
             }
-            Button(onClick = {
+            ElevatedButton(onClick = {
                 NoteChecker(viewModel, context, Notes.F)
 
             }) {
@@ -154,19 +160,19 @@ fun QuizButtons(viewModel: QuizViewModel){
         }
         Row (horizontalArrangement = Arrangement.SpaceEvenly, verticalAlignment = Alignment.CenterVertically ,modifier = Modifier.fillMaxWidth()){
             Spacer(modifier = Modifier.width(10.dp))
-            Button(onClick = {
+            ElevatedButton(onClick = {
                 NoteChecker(viewModel, context,Notes.G)
 
             }) {
                 Text(text = "G")
             }
-            Button(onClick = {
+            ElevatedButton(onClick = {
                 NoteChecker(viewModel, context,Notes.A)
 
             }) {
                 Text(text = "A")
             }
-            Button(onClick = {
+            ElevatedButton(onClick = {
                 NoteChecker(viewModel, context, Notes.B)
 
             }) {
@@ -185,15 +191,16 @@ private fun NoteChecker(viewModel:QuizViewModel, context: Context, buttonNote: N
         ChangeNote(viewModel, context)
 
     } else {
-        WrongNote(context)
+        WrongNote(viewModel, context)
     }
 }
 
-fun WrongNote(context: Context) {
+fun WrongNote(viewModel: QuizViewModel, context: Context) {
     val text = "Wrong Note!"
     val duration = Toast.LENGTH_SHORT
     val toast = Toast.makeText(context, text, duration)
     toast.show()
+    viewModel.answerIsWrong()
 }
 
 fun ChangeNote(viewModel: QuizViewModel, context: Context) {
@@ -216,28 +223,38 @@ fun SightReadingApp(){
     val viewModel = viewModel<QuizViewModel>()
 
     Column(verticalArrangement = Arrangement.Center,modifier = Modifier.fillMaxSize()) {
-
+        Display(viewModel)
         SightMaker(viewModel, mutableNote.value)
         QuizButtons(viewModel)
     }
 
 }
-/*
-@Preview(showBackground = true, device = "id:pixel_5")
+
 @Composable
-fun SightMakerPreview() {
-    SightReadingTheme {
-        SightMaker(note = Notes.C)
-    }
-}
-@Preview(showBackground = true, device = "id:pixel_7_pro")
-@Composable
-fun QuizButtonsPreview(){
-    SightReadingTheme {
-        QuizButtons(currentNote = Notes.C)
+fun Display(viewModel: QuizViewModel){
+
+    Row (horizontalArrangement = Arrangement.Center,verticalAlignment = Alignment.CenterVertically, modifier = Modifier.fillMaxWidth()){
+        val offset = Offset(4.0f, 5.0f)
+
+        if(viewModel.isAnswerCorrect==-1){
+            Text(text = "Welcome", style = TextStyle(
+                fontSize = 24.sp,
+                shadow = Shadow(
+                    color = Color.Gray, offset = offset, blurRadius = 3f
+                )
+
+            ))
+        }
+        if(viewModel.isAnswerCorrect==1){
+            Text(text = "Answer is Correct", style = MaterialTheme.typography.titleLarge)
+        }
+        else if(viewModel.isAnswerCorrect==0){
+            Text(text = "Answer is Wrong", style = MaterialTheme.typography.titleLarge)
+        }
     }
 
-}*/
+}
+
 @Preview(showBackground = true, device = "id:pixel_7_pro")
 @Composable
 fun SightReadingAppPreview(){

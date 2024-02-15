@@ -6,12 +6,17 @@ import android.text.Layout
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.animation.animateContentSize
+import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 
 
 import androidx.compose.foundation.layout.Column
+
+
 
 import androidx.compose.foundation.layout.Row
 
@@ -23,11 +28,18 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Email
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.ButtonElevation
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Divider
 import androidx.compose.material3.ElevatedButton
+import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -46,6 +58,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -106,13 +119,15 @@ fun SightMaker(viewModel: QuizViewModel, note: Notes) {
             Divider(color = Color.Black, thickness = 1.dp)
             Spacer(modifier = Modifier.height(30.dp))
         }
-        Icon(
+        val animatedOffset by animateDpAsState(viewModel.currentNote.offset)
+
+            Icon(
             painter = painterResource(R.drawable.wholenote),
             contentDescription = "Music",
             Modifier
                 .size(40.dp)
                 .align(Alignment.Center)
-                .offset(y = viewModel.currentNote.offset)
+                .offset(y = animatedOffset)
         )
         Icon(
             painter = painterResource(R.drawable.fclef),
@@ -133,25 +148,25 @@ fun QuizButtons(viewModel: QuizViewModel){
         Row (horizontalArrangement = Arrangement.SpaceEvenly, verticalAlignment = Alignment.CenterVertically ,modifier = Modifier.fillMaxWidth()){
 
 
-            ElevatedButton(onClick = {
+            ElevatedButton(elevation = ButtonDefaults.elevatedButtonElevation(10.dp),onClick = {
                 NoteChecker(viewModel, context, Notes.C)
 
             }) {
                 Text(text = "C")
             }
-            ElevatedButton(onClick = {
+            ElevatedButton(elevation = ButtonDefaults.elevatedButtonElevation(10.dp),onClick = {
                 NoteChecker(viewModel, context, Notes.D)
 
             }) {
                 Text(text = "D")
             }
-            ElevatedButton(onClick = {
+            ElevatedButton(elevation = ButtonDefaults.elevatedButtonElevation(10.dp),onClick = {
                 NoteChecker(viewModel, context, Notes.E)
 
             }) {
                 Text(text = "E")
             }
-            ElevatedButton(onClick = {
+            ElevatedButton(elevation = ButtonDefaults.elevatedButtonElevation(10.dp),onClick = {
                 NoteChecker(viewModel, context, Notes.F)
 
             }) {
@@ -160,19 +175,19 @@ fun QuizButtons(viewModel: QuizViewModel){
         }
         Row (horizontalArrangement = Arrangement.SpaceEvenly, verticalAlignment = Alignment.CenterVertically ,modifier = Modifier.fillMaxWidth()){
             Spacer(modifier = Modifier.width(10.dp))
-            ElevatedButton(onClick = {
+            ElevatedButton(elevation = ButtonDefaults.elevatedButtonElevation(10.dp),onClick = {
                 NoteChecker(viewModel, context,Notes.G)
 
             }) {
                 Text(text = "G")
             }
-            ElevatedButton(onClick = {
+            ElevatedButton(elevation = ButtonDefaults.elevatedButtonElevation(10.dp),onClick = {
                 NoteChecker(viewModel, context,Notes.A)
 
             }) {
                 Text(text = "A")
             }
-            ElevatedButton(onClick = {
+            ElevatedButton(elevation = ButtonDefaults.elevatedButtonElevation(10.dp),onClick = {
                 NoteChecker(viewModel, context, Notes.B)
 
             }) {
@@ -196,19 +211,22 @@ private fun NoteChecker(viewModel:QuizViewModel, context: Context, buttonNote: N
 }
 
 fun WrongNote(viewModel: QuizViewModel, context: Context) {
-    val text = "Wrong Note!"
+
+/*    val text = "Wrong Note!"
     val duration = Toast.LENGTH_SHORT
     val toast = Toast.makeText(context, text, duration)
-    toast.show()
+    toast.show()*/
     viewModel.answerIsWrong()
 }
 
 fun ChangeNote(viewModel: QuizViewModel, context: Context) {
 
+/*
     val text = "Correct Note!"
     val duration = Toast.LENGTH_SHORT
     val toast = Toast.makeText(context, text, duration)
     toast.show()
+*/
 
     viewModel.changeNote()
 
@@ -232,24 +250,50 @@ fun SightReadingApp(){
 
 @Composable
 fun Display(viewModel: QuizViewModel){
-
-    Row (horizontalArrangement = Arrangement.Center,verticalAlignment = Alignment.CenterVertically, modifier = Modifier.fillMaxWidth()){
-        val offset = Offset(4.0f, 5.0f)
-
-        if(viewModel.isAnswerCorrect==-1){
-            Text(text = "Welcome", style = TextStyle(
-                fontSize = 24.sp,
-                shadow = Shadow(
-                    color = Color.Gray, offset = offset, blurRadius = 3f
+    Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxWidth()){
+        ElevatedCard(elevation = CardDefaults.cardElevation(
+            defaultElevation = 6.dp
+        ),
+            modifier = Modifier
+                .padding(30.dp)
+                .align(Alignment.Center)
+                .background(
+                    MaterialTheme.colorScheme.background,
+                    CircleShape
                 )
+                .animateContentSize()
 
-            ))
-        }
-        if(viewModel.isAnswerCorrect==1){
-            Text(text = "Answer is Correct", style = MaterialTheme.typography.titleLarge)
-        }
-        else if(viewModel.isAnswerCorrect==0){
-            Text(text = "Answer is Wrong", style = MaterialTheme.typography.titleLarge)
+        ){
+            val offset = Offset(4.0f, 5.0f)
+
+            if(viewModel.isAnswerCorrect==-1){
+                Text(modifier = Modifier
+                    .padding(16.dp),
+                    text = "Welcome", style = TextStyle(
+                    fontSize = 24.sp,
+                    textAlign = TextAlign.Center,
+
+
+                    )
+                )
+            }
+            if(viewModel.isAnswerCorrect==1){
+                Text(modifier = Modifier
+                    .padding(16.dp),
+                    text = "Answer is Correct", style = TextStyle(
+                    fontSize = 24.sp,
+                    textAlign = TextAlign.Center,
+))
+            }
+            else if(viewModel.isAnswerCorrect==0){
+                Text(modifier = Modifier
+                    .padding(16.dp),
+                    text = "Answer is Wrong", style = TextStyle(
+                    fontSize = 24.sp,
+                    textAlign = TextAlign.Center,
+                    )
+                )
+            }
         }
     }
 

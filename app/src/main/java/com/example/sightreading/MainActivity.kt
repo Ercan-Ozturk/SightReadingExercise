@@ -1,4 +1,4 @@
-package com.example.sightreading
+package com.ercanozturk.sightreading
 
 import android.content.Context
 import android.os.Bundle
@@ -64,7 +64,8 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.sightreading.ui.theme.SightReadingTheme
+import com.ercanozturk.sightreading.ui.theme.SightReadingTheme
+
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -85,14 +86,14 @@ class MainActivity : ComponentActivity() {
         }
     }
 }
-enum class Notes(val offset: Dp) {
-    C(15.dp),
-    D(0.dp),
-    E(-15.dp),
-    F(-30.dp),
-    G(60.dp),
-    A(45.dp),
-    B(30.dp);
+enum class Notes(val offset: Dp, val octaveOffset: Dp) {
+    C(15.dp, -90.dp),
+    D(0.dp, -105.dp),
+    E(-15.dp, -15.dp),
+    F(-30.dp, -30.dp),
+    G(60.dp, -45.dp),
+    A(45.dp, -60.dp),
+    B(30.dp, -78.dp);
 }
 @Composable
 fun SightMaker(viewModel: QuizViewModel, note: Notes) {
@@ -100,13 +101,21 @@ fun SightMaker(viewModel: QuizViewModel, note: Notes) {
 
 
     Box(contentAlignment = Alignment.Center, modifier = Modifier) {
+        val animatedOffset by animateDpAsState(viewModel.currentOctave)
+        //val animatedOffset by animateDpAsState(Notes.B.octaveOffset)
 
+        val k =
         Column(modifier = Modifier
             .padding(30.dp)
             .fillMaxWidth(),
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
-        ) {
+        )
+        {
+
+            if(animatedOffset < Notes.A.octaveOffset){
+                Divider(color = Color.Black, thickness = 1.dp, modifier = Modifier.width(60.dp))
+            }
             Spacer(modifier = Modifier.height(30.dp))
             Divider(color = Color.Black, thickness = 1.dp)
             Spacer(modifier = Modifier.height(30.dp))
@@ -119,13 +128,13 @@ fun SightMaker(viewModel: QuizViewModel, note: Notes) {
             Divider(color = Color.Black, thickness = 1.dp)
             Spacer(modifier = Modifier.height(30.dp))
         }
-        val animatedOffset by animateDpAsState(viewModel.currentNote.offset)
 
-            Icon(
+
+        Icon(
             painter = painterResource(R.drawable.wholenote),
             contentDescription = "Music",
             Modifier
-                .size(40.dp)
+                .size(45.dp)
                 .align(Alignment.Center)
                 .offset(y = animatedOffset)
         )

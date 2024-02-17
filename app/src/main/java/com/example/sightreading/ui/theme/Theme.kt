@@ -1,4 +1,4 @@
-package com.example.sightreading.ui.theme
+package com.ercanozturk.sightreading.ui.theme
 
 import android.app.Activity
 import android.os.Build

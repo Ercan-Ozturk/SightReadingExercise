@@ -4,15 +4,15 @@ plugins {
 }
 
 android {
-    namespace = "com.example.sightreading"
+    namespace = "com.ercanozturk.sightreading"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.example.sightreading"
+        applicationId = "com.ercanozturk.sightreading"
         minSdk = 24
         targetSdk = 34
-        versionCode = 1
-        versionName = "1.0"
+        versionCode = 3
+        versionName = "1.2"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {

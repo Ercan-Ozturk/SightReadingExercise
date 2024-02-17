@@ -1,4 +1,4 @@
-package com.example.sightreading
+package com.ercanozturk.sightreading
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -10,6 +10,8 @@ class QuizViewModel: ViewModel() {
 
     var currentNote by mutableStateOf(Notes.C)
         private set
+    var currentOctave by mutableStateOf(currentNote.offset)
+        private set
     var isAnswerCorrect by mutableStateOf(-1)
         private set
     fun changeNote(){
@@ -19,6 +21,14 @@ class QuizViewModel: ViewModel() {
             nextNote = Notes.values().random()
         }
         currentNote = nextNote
+        val rnds = (0..1).random()
+
+        if(rnds == 1){
+            currentOctave = currentNote.offset
+        }else{
+            currentOctave = currentNote.octaveOffset
+        }
+
     }
     fun answerIsWrong(){
         isAnswerCorrect = 0

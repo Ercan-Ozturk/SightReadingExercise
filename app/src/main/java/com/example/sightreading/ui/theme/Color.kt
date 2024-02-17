@@ -1,4 +1,4 @@
-package com.example.sightreading.ui.theme
+package com.ercanozturk.sightreading.ui.theme
 
 import androidx.compose.ui.graphics.Color
 

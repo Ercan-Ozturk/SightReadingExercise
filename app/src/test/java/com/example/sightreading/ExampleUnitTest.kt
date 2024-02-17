@@ -1,4 +1,4 @@
-package com.example.sightreading
+package com.ercanozturk.sightreading
 
 import org.junit.Test
 

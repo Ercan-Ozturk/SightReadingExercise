@@ -253,13 +253,41 @@ fun SightReadingApp(){
     val viewModel = viewModel<QuizViewModel>()
 
     Column(verticalArrangement = Arrangement.Center,modifier = Modifier.fillMaxSize()) {
+        Spacer(modifier = Modifier.weight(0.2F))
+        ScoreDisplay(viewModel)
+        Spacer(modifier = Modifier.weight(0.2F))
         Display(viewModel)
         SightMaker(viewModel, mutableNote.value)
+        Spacer(modifier = Modifier.weight(0.1F))
         QuizButtons(viewModel)
+        Spacer(modifier = Modifier.weight(0.7F))
     }
 
 }
+@Composable
+fun ScoreDisplay(viewModel: QuizViewModel){
+    Box (contentAlignment = Alignment.Center, modifier = Modifier.fillMaxWidth()){
+        Card {
+            Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                Text(modifier = Modifier
+                    .padding(top = 8.dp, start = 8.dp, end = 8.dp),
+                    text = "SCORE", style = TextStyle(
+                        fontSize = 12.sp,
+                        textAlign = TextAlign.Center,
+                    )
+                )
+                Text(modifier = Modifier
+                    .padding(horizontal = 8.dp),
+                    text = viewModel.score.toString(), style = TextStyle(
+                        fontSize = 40.sp,
+                        textAlign = TextAlign.Center,
+                    )
+                )
+            }
 
+        }
+    }
+}
 @Composable
 fun Display(viewModel: QuizViewModel){
     Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxWidth()){

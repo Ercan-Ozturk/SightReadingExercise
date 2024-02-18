@@ -10,12 +10,15 @@ class QuizViewModel: ViewModel() {
 
     var currentNote by mutableStateOf(Notes.C)
         private set
+    var score by mutableStateOf(0)
+        private set
     var currentOctave by mutableStateOf(currentNote.offset)
         private set
     var isAnswerCorrect by mutableStateOf(-1)
         private set
     fun changeNote(){
         isAnswerCorrect = 1
+        score += 1
         var nextNote = Notes.values().random()
         while (nextNote == currentNote){
             nextNote = Notes.values().random()
@@ -32,5 +35,7 @@ class QuizViewModel: ViewModel() {
     }
     fun answerIsWrong(){
         isAnswerCorrect = 0
+        score -= 1
     }
+
 }

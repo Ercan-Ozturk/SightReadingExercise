@@ -89,8 +89,8 @@ class MainActivity : ComponentActivity() {
 enum class Notes(val offset: Dp, val octaveOffset: Dp) {
     C(15.dp, -90.dp),
     D(0.dp, -105.dp),
-    E(-15.dp, -15.dp),
-    F(-30.dp, -30.dp),
+    E(93.dp, -15.dp),
+    F(75.dp, -30.dp),
     G(60.dp, -45.dp),
     A(45.dp, -60.dp),
     B(30.dp, -78.dp);
@@ -102,7 +102,7 @@ fun SightMaker(viewModel: QuizViewModel, note: Notes) {
 
     Box(contentAlignment = Alignment.Center, modifier = Modifier) {
         val animatedOffset by animateDpAsState(viewModel.currentOctave)
-        //val animatedOffset by animateDpAsState(Notes.B.octaveOffset)
+        
 
         val k =
         Column(modifier = Modifier
@@ -113,7 +113,7 @@ fun SightMaker(viewModel: QuizViewModel, note: Notes) {
         )
         {
 
-            if(animatedOffset < Notes.A.octaveOffset){
+            if(animatedOffset < Notes.B.octaveOffset){
                 Divider(color = Color.Black, thickness = 1.dp, modifier = Modifier.width(60.dp))
             }
             Spacer(modifier = Modifier.height(30.dp))
@@ -127,6 +127,9 @@ fun SightMaker(viewModel: QuizViewModel, note: Notes) {
             Spacer(modifier = Modifier.height(30.dp))
             Divider(color = Color.Black, thickness = 1.dp)
             Spacer(modifier = Modifier.height(30.dp))
+            if(animatedOffset > Notes.F.offset){
+                Divider(color = Color.Black, thickness = 1.dp, modifier = Modifier.width(60.dp))
+            }
         }
 
 
